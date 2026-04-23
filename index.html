@@ -19,7 +19,6 @@
             color: white;
         }
 
-        /* UI Panel - at the bottom so sky is visible */
         .ui-panel {
             position: absolute;
             bottom: 20px;
@@ -165,7 +164,6 @@
         backLight.position.set(0, 2, -3);
         scene.add(backLight);
         
-        // Moon glow
         const moonLight = new THREE.PointLight(0xffaa88, 0.5);
         moonLight.position.set(3, 4, -5);
         scene.add(moonLight);
@@ -187,63 +185,59 @@
         moon.position.set(4, 3.5, -6);
         scene.add(moon);
 
-        // Ground (dark grass)
+        // Ground
         const ground = new THREE.Mesh(new THREE.CircleGeometry(6, 32), new THREE.MeshStandardMaterial({ color: 0x1a2a1a, roughness: 0.8, emissive: 0x112211 }));
         ground.rotation.x = -Math.PI / 2;
         ground.position.y = -0.6;
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // ========= LANTERNS WITH PHOTOS =========
-        // IMPORTANT: Replace the image URLs with your actual photos of Ryoko!
-        // You can use local files like "ryoko1.jpg" or online URLs
+        // ========= LANTERNS WITH YOUR PHOTOS OF RYOKO =========
+        // Your images from GitHub: https://monster-03.github.io/sky/
         
         const lanternsData = [
             { 
                 name: "🏮 FAROLILLO 1", 
                 color: 0xff6688,
-                message: "🌸 AHMAD → RYOKO 🌸\n\nRyoko, cada vez que veo esta foto, recuerdo por qué me enamoré de ti. Tu sonrisa ilumina mi mundo más que mil estrellas. Eres la razón por la que sonrío cada mañana al despertar. Gracias por existir en mi vida, mi guerrera hermosa. Te quiero con todo mi corazón. 💗",
-                // REPLACE THIS URL with your photo of Ryoko:
-                imageUrl: "https://placehold.co/200x200/ff6688/white?text=Ryoko+1"
+                message: "🌸 AHMAD → RYOKO 🌸\n\nMi guerrera hermosa, cuando veo esta foto, recuerdo por qué mi corazón late más fuerte cada día. Tu sonrisa ilumina mi mundo más que mil estrellas. Eres la razón por la que sonrío cada mañana al despertar, la razón por la que quiero ser mejor persona. Gracias por existir en mi vida, gracias por permitirme amarte. Eres mi sol, mi luna, mi universo entero. Te quiero con todo mi ser. 💗",
+                imageUrl: "Ryoko 1.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 2", 
                 color: 0xffaa66,
-                message: "🌙 AHMAD → RYOKO 🌙\n\nRyoko, esta foto me hace pensar en todas las aventuras que quiero vivir contigo. Volar entre estrellas, caminar por playas desconocidas, y simplemente estar a tu lado. Eres mi compañera de viaje favorita, mi confidente, mi amor eterno. No hay nadie como tú en todo el universo. 💕",
-                imageUrl: "https://placehold.co/200x200/ffaa66/white?text=Ryoko+2"
+                message: "🌙 AHMAD → RYOKO 🌙\n\nRyoko, cada vez que veo esta foto, imagino todas las aventuras que quiero vivir a tu lado. Volar entre estrellas, caminar por playas infinitas, perderme en tus ojos y no querer encontrar la salida. Eres mi compañera de viaje favorita, mi confidente, mi amor eterno. No hay nadie como tú en todo el universo. Contigo, cada día es una nueva aventura, y quiero vivirlas todas a tu lado. 💕",
+                imageUrl: "Ryoko 2.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 3", 
                 color: 0x66ccff,
-                message: "💋 AHMAD → RYOKO 💋\n\nRyoko, esa mirada tuya… la que tienes en esta foto, la que me derrite por completo. Cuando me miras así, siento que el universo se detiene. Quiero robarte un beso cada vez que veo tu sonrisa. Eres peligrosa, eres hermosa, eres todo lo que siempre soñé. Y lo mejor es que eres mía. 😈💜",
-                imageUrl: "https://placehold.co/200x200/66ccff/white?text=Ryoko+3"
+                message: "💋 AHMAD → RYOKO 💋\n\nRyoko, esa mirada tuya… la que tienes en esta foto, la que me derrite por completo cada vez que la veo. Cuando me miras así, siento que el universo entero se detiene en silencio para admirarte. Quiero robarte un beso cada vez que veo tu sonrisa, cada vez que escucho tu risa. Eres peligrosa, eres hermosa, eres todo lo que siempre soñé. Y lo mejor de todo es que eres mía, y yo soy completamente tuyo. 😈💜",
+                imageUrl: "Ryoko 3.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 4", 
                 color: 0x88ffaa,
-                message: "💎 AHMAD → RYOKO 💎\n\nRyoko, te prometo que mientras exista este universo, yo estaré a tu lado. En las buenas y en las malas, en los momentos de caos y en los de calma. Tú eres mi hogar, mi refugio, mi razón para ser mejor cada día. Te quiero con locura, con ternura, con todo lo que soy. 🔥💗",
-                imageUrl: "https://placehold.co/200x200/88ffaa/white?text=Ryoko+4"
+                message: "💎 AHMAD → RYOKO 💎\n\nRyoko, te prometo que mientras exista este universo, yo estaré a tu lado. En los días de sol y en los de tormenta, en los momentos de caos y en los de calma absoluta. Tú eres mi hogar, mi refugio, mi razón para ser mejor cada día. No importa lo que pase, no importa qué tormentas vengan, yo voy a sostener tu mano y no la voy a soltar nunca. Te quiero con locura, con ternura, con todo lo que soy. 🔥💗",
+                imageUrl: "Ryoko 4.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 5", 
                 color: 0xff99ff,
-                message: "🌹 AHMAD → RYOKO 🌹\n\nRyoko, cuando veo tu cara en esta foto, no puedo evitar sonreír como un tonto. Tus ojos tienen el poder de alegrar mi día más oscuro. Tu risa es mi canción favorita. Eres mi sol, mi luna, todas mis estrellas juntas. Gracias por ser TÚ, tan increíble, tan única, tan perfectamente imperfecta. 💗✨",
-                imageUrl: "https://placehold.co/200x200/ff99ff/white?text=Ryoko+5"
+                message: "🌹 AHMAD → RYOKO 🌹\n\nRyoko, cuando veo tu cara en esta foto, no puedo evitar sonreír como un tonto enamorado. Tus ojos tienen el poder de alegrar mi día más oscuro, de convertir una noche fría en una tarde cálida. Tu risa es mi canción favorita, la que quiero escuchar todos los días de mi vida. Eres mi sol, mi luna, todas mis estrellas juntas. Gracias por ser TÚ, tan increíble, tan única, tan perfectamente imperfecta. 💗✨",
+                imageUrl: "Ryoko 5.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 6", 
                 color: 0xff8866,
-                message: "💕 AHMAD → RYOKO 💕\n\nRyoko, dueña de mi alma. Cada vez que veo esta foto, recuerdo por qué lucho cada día. Por ti, para ti, contigo. Eres mi guerrera, mi amante, mi mejor amiga. No hay galaxia, no hay planeta, no hay rincón del universo que prefiera sobre estar a tu lado. Te amo. Con todo mi ser. Para siempre. 💗🔥",
-                imageUrl: "https://placehold.co/200x200/ff8866/white?text=Ryoko+6"
+                message: "💕 AHMAD → RYOKO 💕\n\nRyoko, dueña absoluta de mi alma y de mis sueños. Cada vez que veo esta foto, recuerdo por qué lucho cada día. Por ti, para ti, contigo. Eres mi guerrera, mi amante, mi mejor amiga. No hay galaxia, no hay planeta, no hay rincón del universo que prefiera sobre estar a tu lado. Eres mi todo, mi principio y mi fin. Te amo. Con todo mi ser. Por siempre y para siempre. 💗🔥",
+                imageUrl: "Ryoko 6.jpeg"
             }
         ];
 
-        // Store lanterns
         let lanterns = [];
         let releasedCount = 0;
         let poemShown = false;
 
-        // LONG POEM AT THE END
         const finalPoem = `💗 POEMA DE AHMAD PARA RYOKO 💗
 
 Ryoko, luz entre mis sueños,
@@ -274,22 +268,18 @@ y siempre quiero cuidarte.
 — Ahmad 💕🔥
 ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨`;
 
-        // Function to create a lantern with a photo
         function createLantern(data, index, xPos, zPos) {
             const group = new THREE.Group();
             
-            // Lantern body (glowing sphere with texture)
             const bodyMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.85 });
             const body = new THREE.Mesh(new THREE.SphereGeometry(0.45, 32, 32), bodyMat);
             body.castShadow = true;
             group.add(body);
             
-            // Inner glow
             const glowMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.6 });
             const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(0.35, 24, 24), glowMat);
             group.add(innerGlow);
             
-            // Lantern top/bottom caps
             const capMat = new THREE.MeshStandardMaterial({ color: 0xcc8844 });
             const topCap = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.15, 8), capMat);
             topCap.position.y = 0.52;
@@ -300,7 +290,6 @@ y siempre quiero cuidarte.
             bottomCap.rotation.x = Math.PI;
             group.add(bottomCap);
             
-            // CSS2D Label (photo container)
             const photoDiv = document.createElement('div');
             photoDiv.style.width = '120px';
             photoDiv.style.height = '120px';
@@ -315,7 +304,6 @@ y siempre quiero cuidarte.
             photoDiv.style.cursor = 'pointer';
             photoDiv.style.touchAction = 'manipulation';
             
-            // Add image
             const img = document.createElement('img');
             img.src = data.imageUrl;
             img.style.width = '100%';
@@ -323,8 +311,9 @@ y siempre quiero cuidarte.
             img.style.objectFit = 'cover';
             img.style.borderRadius = '18px';
             img.alt = `Foto de Ryoko ${index + 1}`;
-            // If image fails to load, show emoji fallback
+            
             img.onerror = () => {
+                console.log("Error loading image: " + data.imageUrl);
                 img.style.display = 'none';
                 const fallback = document.createElement('div');
                 fallback.textContent = '📸';
@@ -338,7 +327,6 @@ y siempre quiero cuidarte.
             };
             photoDiv.appendChild(img);
             
-            // Add name label
             const nameSpan = document.createElement('div');
             nameSpan.textContent = data.name;
             nameSpan.style.fontSize = '0.7rem';
@@ -374,7 +362,6 @@ y siempre quiero cuidarte.
             };
         }
 
-        // Position lanterns in a circle
         const lanternPositions = [
             { x: -2.5, z: -1.5 },
             { x: -1.2, z: -2.2 },
@@ -384,14 +371,12 @@ y siempre quiero cuidarte.
             { x: 1.8, z: -0.2 }
         ];
 
-        // Create all lanterns
         lanternsData.forEach((data, i) => {
             const pos = lanternPositions[i % lanternPositions.length];
             const lantern = createLantern(data, i, pos.x, pos.z);
             lanterns.push(lantern);
         });
 
-        // Animation variables for floating lanterns
         let time = 0;
         let flyingLanterns = [];
         
@@ -420,10 +405,9 @@ y siempre quiero cuidarte.
             poemShown = true;
             showMessage(`💖💖💖 ¡RYOKO, MI AMOR! HAS LIBERADO TODOS LOS FAROLILLOS 💖💖💖\n\n${finalPoem}\n\n🌙✨ Tus recuerdos vuelan alto, como mi amor por ti. ✨🌙`);
             
-            // Create heart constellation in the sky
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 150; i++) {
                 const heart = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 8), new THREE.MeshStandardMaterial({ color: 0xff66aa, emissive: 0xff44aa }));
-                heart.position.set((Math.random() - 0.5) * 10, Math.random() * 6 + 2, (Math.random() - 0.5) * 8 - 4);
+                heart.position.set((Math.random() - 0.5) * 12, Math.random() * 7 + 1, (Math.random() - 0.5) * 10 - 3);
                 scene.add(heart);
                 setTimeout(() => scene.remove(heart), 3000);
             }
@@ -439,10 +423,8 @@ y siempre quiero cuidarte.
             lantern.released = true;
             releasedCount++;
             
-            // Show the message
             showMessage(`🏮✨ ${lantern.message} ✨🏮`);
             
-            // Animate: make it fly up and fade
             const startY = lantern.group.position.y;
             const startTime = time;
             const duration = 2;
@@ -462,7 +444,6 @@ y siempre quiero cuidarte.
             }
         }
 
-        // Raycaster for clicking on lanterns
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         
@@ -498,19 +479,16 @@ y siempre quiero cuidarte.
             }
         }
 
-        // Animation loop
         function animate() {
             time += 0.016;
             requestAnimationFrame(animate);
             
-            // Update flying lanterns
             for (let i = flyingLanterns.length - 1; i >= 0; i--) {
                 const fly = flyingLanterns[i];
                 const elapsed = time - fly.startTime;
                 const progress = Math.min(elapsed / fly.duration, 1);
                 
                 if (progress >= 1) {
-                    // Lantern reached the sky, remove it
                     scene.remove(fly.lantern.group);
                     fly.lantern.group.children.forEach(child => {
                         if (child.isCSS2DObject) scene.remove(child);
@@ -520,16 +498,13 @@ y siempre quiero cuidarte.
                     const ease = Math.sin(progress * Math.PI / 2);
                     const newY = fly.startY + (6 * ease);
                     fly.lantern.group.position.y = newY;
-                    // Add slight rotation
                     fly.lantern.group.rotation.y = progress * Math.PI * 2;
                     fly.lantern.group.rotation.x = Math.sin(progress * Math.PI) * 0.5;
-                    // Scale down slightly
                     const scale = 1 - (ease * 0.3);
                     fly.lantern.group.scale.set(scale, scale, scale);
                 }
             }
             
-            // Animate remaining lanterns (floating gently)
             lanterns.forEach((lantern, idx) => {
                 if (!lantern.released) {
                     const floatY = Math.sin(time * 1.5 + idx) * 0.08;
@@ -538,7 +513,6 @@ y siempre quiero cuidarte.
                 }
             });
             
-            // Rotate stars slowly
             stars.rotation.y += 0.0005;
             stars.rotation.x += 0.0002;
             
@@ -548,16 +522,13 @@ y siempre quiero cuidarte.
         
         animate();
 
-        // Event listeners
         window.addEventListener('click', handleTap);
         window.addEventListener('touchstart', handleTap);
         
         document.getElementById('resetBtn').addEventListener('click', () => {
-            // Reload the page to reset everything
             window.location.reload();
         });
         
-        // Add floating particles (fireflies)
         const fireflyCount = 200;
         const fireflyGeo = new THREE.BufferGeometry();
         const fireflyPos = [];
