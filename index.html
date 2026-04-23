@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>🏮 LOS FAROLILLOS DEL AMOR | AHMAD 🌙 RYOKO 🏮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: -apple-system, 'Segoe UI', 'Courier New', monospace;
+            background: linear-gradient(to bottom, #0a0a2a, #1a0a2a);
+            color: white;
+        }
+
+        /* UI Panel - at the bottom so sky is visible */
+        .ui-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 28px;
+            padding: 12px 14px;
+            border: 1px solid #ffaa66;
+            box-shadow: 0 0 25px rgba(255, 170, 102, 0.3);
+            z-index: 20;
+            text-align: center;
+            pointer-events: auto;
+        }
+
+        .message-box {
+            background: #1a0525dd;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffaa66;
+            color: #ffe0f0;
+            font-size: 0.7rem;
+            line-height: 1.55;
+            max-height: 110px;
+            overflow-y: auto;
+            text-align: left;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .lantern-counter {
+            font-size: 0.7rem;
+            color: #ffcc99;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            background: #ff8866aa;
+            border: 1px solid #ffaa88;
+            padding: 10px 20px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-block;
+            transition: 0.08s linear;
+            font-family: monospace;
+            touch-action: manipulation;
+        }
+
+        .reset-btn:active {
+            transform: scale(0.96);
+            background: #ffaa88cc;
+        }
+
+        .title {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #ffccaa;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px;
+            border-radius: 30px;
+            width: fit-content;
+            margin: 0 auto;
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .message-box { font-size: 0.65rem; max-height: 105px; padding: 10px; }
+            .reset-btn { padding: 8px 16px; font-size: 0.75rem; }
+            .lantern-counter { font-size: 0.65rem; }
+            .title { font-size: 0.6rem; top: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">🏮 LOS FAROLILLOS DEL AMOR | AHMAD ✨ RYOKO 🏮</div>
+    <div class="ui-panel" id="uiPanel">
+        <div class="lantern-counter" id="lanternCounter">🏮 FAROLILLOS POR LIBERAR: 6/6 🏮</div>
+        <div class="message-box" id="romanticMessage">
+            ✨ Toca un FAROLILLO para liberarlo... ✨<br>
+            Cada farolillo contiene una foto tuya y un mensaje de Ahmad. ¡Léelos todos! 🏮💜
+        </div>
+        <div class="reset-btn" id="resetBtn">🔄 REINICIAR FAROLILLOS 🔄</div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a2a);
+        scene.fog = new THREE.FogExp2(0x0a0a2a, 0.008);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 8);
+        camera.lookAt(0, 1.5, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        const labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.left = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x222244);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xffccaa, 1);
+        mainLight.position.set(3, 5, 4);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+        const backLight = new THREE.PointLight(0xffaa66, 0.6);
+        backLight.position.set(0, 2, -3);
+        scene.add(backLight);
+        
+        // Moon glow
+        const moonLight = new THREE.PointLight(0xffaa88, 0.5);
+        moonLight.position.set(3, 4, -5);
+        scene.add(moonLight);
+
+        // Stars background
+        const starGeo = new THREE.BufferGeometry();
+        const starPos = [];
+        for (let i = 0; i < 1500; i++) {
+            starPos.push((Math.random() - 0.5) * 300);
+            starPos.push((Math.random() - 0.5) * 150);
+            starPos.push((Math.random() - 0.5) * 100 - 50);
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(starPos), 3));
+        const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffddcc, size: 0.08, transparent: true, opacity: 0.6 }));
+        scene.add(stars);
+
+        // Moon
+        const moon = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), new THREE.MeshStandardMaterial({ color: 0xffeedd, emissive: 0xffcc88, emissiveIntensity: 0.3 }));
+        moon.position.set(4, 3.5, -6);
+        scene.add(moon);
+
+        // Ground (dark grass)
+        const ground = new THREE.Mesh(new THREE.CircleGeometry(6, 32), new THREE.MeshStandardMaterial({ color: 0x1a2a1a, roughness: 0.8, emissive: 0x112211 }));
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -0.6;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // ========= LANTERNS WITH PHOTOS =========
+        // IMPORTANT: Replace the image URLs with your actual photos of Ryoko!
+        // You can use local files like "ryoko1.jpg" or online URLs
+        
+        const lanternsData = [
+            { 
+                name: "🏮 FAROLILLO 1", 
+                color: 0xff6688,
+                message: "🌸 AHMAD → RYOKO 🌸\n\nRyoko, cada vez que veo esta foto, recuerdo por qué me enamoré de ti. Tu sonrisa ilumina mi mundo más que mil estrellas. Eres la razón por la que sonrío cada mañana al despertar. Gracias por existir en mi vida, mi guerrera hermosa. Te quiero con todo mi corazón. 💗",
+                // REPLACE THIS URL with your photo of Ryoko:
+                imageUrl: "https://placehold.co/200x200/ff6688/white?text=Ryoko+1"
+            },
+            { 
+                name: "🏮 FAROLILLO 2", 
+                color: 0xffaa66,
+                message: "🌙 AHMAD → RYOKO 🌙\n\nRyoko, esta foto me hace pensar en todas las aventuras que quiero vivir contigo. Volar entre estrellas, caminar por playas desconocidas, y simplemente estar a tu lado. Eres mi compañera de viaje favorita, mi confidente, mi amor eterno. No hay nadie como tú en todo el universo. 💕",
+                imageUrl: "https://placehold.co/200x200/ffaa66/white?text=Ryoko+2"
+            },
+            { 
+                name: "🏮 FAROLILLO 3", 
+                color: 0x66ccff,
+                message: "💋 AHMAD → RYOKO 💋\n\nRyoko, esa mirada tuya… la que tienes en esta foto, la que me derrite por completo. Cuando me miras así, siento que el universo se detiene. Quiero robarte un beso cada vez que veo tu sonrisa. Eres peligrosa, eres hermosa, eres todo lo que siempre soñé. Y lo mejor es que eres mía. 😈💜",
+                imageUrl: "https://placehold.co/200x200/66ccff/white?text=Ryoko+3"
+            },
+            { 
+                name: "🏮 FAROLILLO 4", 
+                color: 0x88ffaa,
+                message: "💎 AHMAD → RYOKO 💎\n\nRyoko, te prometo que mientras exista este universo, yo estaré a tu lado. En las buenas y en las malas, en los momentos de caos y en los de calma. Tú eres mi hogar, mi refugio, mi razón para ser mejor cada día. Te quiero con locura, con ternura, con todo lo que soy. 🔥💗",
+                imageUrl: "https://placehold.co/200x200/88ffaa/white?text=Ryoko+4"
+            },
+            { 
+                name: "🏮 FAROLILLO 5", 
+                color: 0xff99ff,
+                message: "🌹 AHMAD → RYOKO 🌹\n\nRyoko, cuando veo tu cara en esta foto, no puedo evitar sonreír como un tonto. Tus ojos tienen el poder de alegrar mi día más oscuro. Tu risa es mi canción favorita. Eres mi sol, mi luna, todas mis estrellas juntas. Gracias por ser TÚ, tan increíble, tan única, tan perfectamente imperfecta. 💗✨",
+                imageUrl: "https://placehold.co/200x200/ff99ff/white?text=Ryoko+5"
+            },
+            { 
+                name: "🏮 FAROLILLO 6", 
+                color: 0xff8866,
+                message: "💕 AHMAD → RYOKO 💕\n\nRyoko, dueña de mi alma. Cada vez que veo esta foto, recuerdo por qué lucho cada día. Por ti, para ti, contigo. Eres mi guerrera, mi amante, mi mejor amiga. No hay galaxia, no hay planeta, no hay rincón del universo que prefiera sobre estar a tu lado. Te amo. Con todo mi ser. Para siempre. 💗🔥",
+                imageUrl: "https://placehold.co/200x200/ff8866/white?text=Ryoko+6"
+            }
+        ];
+
+        // Store lanterns
+        let lanterns = [];
+        let releasedCount = 0;
+        let poemShown = false;
+
+        // LONG POEM AT THE END
+        const finalPoem = `💗 POEMA DE AHMAD PARA RYOKO 💗
+
+Ryoko, luz entre mis sueños,
+estrella que guía mi caminar.
+Tus fotos son tesoros eternos,
+recuerdos que quiero guardar.
+
+Cada imagen de tu sonrisa
+enciende mi corazón sin pausa.
+Eres fuego, eres brisa,
+eres mi única causa.
+
+Cuando tus farolillos vuelen alto,
+mis palabras volarán contigo.
+Ryoko, dueña de mis latidos,
+tú eres mi mejor amigo, mi amor, mi abrigo.
+
+Hoy y siempre, bajo esta luna brillante,
+te prometo amor eterno.
+Eres mi guerrera, mi amante,
+mi comienzo y mi invierno.
+
+Gracias por existir, mi amor.
+Gracias por dejarme amarte.
+Eres mi cielo, mi tierra, mi flor,
+y siempre quiero cuidarte.
+
+— Ahmad 💕🔥
+✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨`;
+
+        // Function to create a lantern with a photo
+        function createLantern(data, index, xPos, zPos) {
+            const group = new THREE.Group();
+            
+            // Lantern body (glowing sphere with texture)
+            const bodyMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.85 });
+            const body = new THREE.Mesh(new THREE.SphereGeometry(0.45, 32, 32), bodyMat);
+            body.castShadow = true;
+            group.add(body);
+            
+            // Inner glow
+            const glowMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.6 });
+            const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(0.35, 24, 24), glowMat);
+            group.add(innerGlow);
+            
+            // Lantern top/bottom caps
+            const capMat = new THREE.MeshStandardMaterial({ color: 0xcc8844 });
+            const topCap = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.15, 8), capMat);
+            topCap.position.y = 0.52;
+            group.add(topCap);
+            
+            const bottomCap = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.15, 8), capMat);
+            bottomCap.position.y = -0.52;
+            bottomCap.rotation.x = Math.PI;
+            group.add(bottomCap);
+            
+            // CSS2D Label (photo container)
+            const photoDiv = document.createElement('div');
+            photoDiv.style.width = '120px';
+            photoDiv.style.height = '120px';
+            photoDiv.style.borderRadius = '20px';
+            photoDiv.style.overflow = 'hidden';
+            photoDiv.style.border = `3px solid ${new THREE.Color(data.color).getStyle()}`;
+            photoDiv.style.boxShadow = `0 0 20px ${new THREE.Color(data.color).getStyle()}`;
+            photoDiv.style.background = '#1a1a2a';
+            photoDiv.style.display = 'flex';
+            photoDiv.style.alignItems = 'center';
+            photoDiv.style.justifyContent = 'center';
+            photoDiv.style.cursor = 'pointer';
+            photoDiv.style.touchAction = 'manipulation';
+            
+            // Add image
+            const img = document.createElement('img');
+            img.src = data.imageUrl;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '18px';
+            img.alt = `Foto de Ryoko ${index + 1}`;
+            // If image fails to load, show emoji fallback
+            img.onerror = () => {
+                img.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.textContent = '📸';
+                fallback.style.fontSize = '3rem';
+                fallback.style.display = 'flex';
+                fallback.style.alignItems = 'center';
+                fallback.style.justifyContent = 'center';
+                fallback.style.width = '100%';
+                fallback.style.height = '100%';
+                photoDiv.appendChild(fallback);
+            };
+            photoDiv.appendChild(img);
+            
+            // Add name label
+            const nameSpan = document.createElement('div');
+            nameSpan.textContent = data.name;
+            nameSpan.style.fontSize = '0.7rem';
+            nameSpan.style.marginTop = '8px';
+            nameSpan.style.color = '#ffccaa';
+            nameSpan.style.fontWeight = 'bold';
+            photoDiv.appendChild(nameSpan);
+            
+            const photoLabel = new CSS2DObject(photoDiv);
+            photoLabel.position.set(0, 0.65, 0);
+            group.add(photoLabel);
+            
+            group.position.set(xPos, 0.2, zPos);
+            group.userData = {
+                index: index,
+                message: data.message,
+                name: data.name,
+                released: false,
+                color: data.color
+            };
+            
+            scene.add(group);
+            
+            return {
+                group: group,
+                label: photoLabel,
+                released: false,
+                index: index,
+                message: data.message,
+                startX: xPos,
+                startZ: zPos,
+                floatOffset: Math.random() * Math.PI * 2
+            };
+        }
+
+        // Position lanterns in a circle
+        const lanternPositions = [
+            { x: -2.5, z: -1.5 },
+            { x: -1.2, z: -2.2 },
+            { x: 0, z: -2.5 },
+            { x: 1.2, z: -2.2 },
+            { x: 2.5, z: -1.5 },
+            { x: 1.8, z: -0.2 }
+        ];
+
+        // Create all lanterns
+        lanternsData.forEach((data, i) => {
+            const pos = lanternPositions[i % lanternPositions.length];
+            const lantern = createLantern(data, i, pos.x, pos.z);
+            lanterns.push(lantern);
+        });
+
+        // Animation variables for floating lanterns
+        let time = 0;
+        let flyingLanterns = [];
+        
+        function updateCounterUI() {
+            const counter = document.getElementById('lanternCounter');
+            if (counter) {
+                const remaining = 6 - releasedCount;
+                if (!poemShown) {
+                    counter.innerHTML = `🏮 FAROLILLOS POR LIBERAR: ${remaining}/6 🏮`;
+                } else {
+                    counter.innerHTML = `💞 ¡TODOS LOS FAROLILLOS VOLARON! POEMA EN EL CIELO 💞`;
+                }
+            }
+        }
+
+        function showMessage(msg) {
+            const box = document.getElementById('romanticMessage');
+            if (box) {
+                box.innerHTML = msg;
+                box.scrollTop = 0;
+            }
+        }
+
+        function showFinalPoem() {
+            if (poemShown) return;
+            poemShown = true;
+            showMessage(`💖💖💖 ¡RYOKO, MI AMOR! HAS LIBERADO TODOS LOS FAROLILLOS 💖💖💖\n\n${finalPoem}\n\n🌙✨ Tus recuerdos vuelan alto, como mi amor por ti. ✨🌙`);
+            
+            // Create heart constellation in the sky
+            for (let i = 0; i < 100; i++) {
+                const heart = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 8), new THREE.MeshStandardMaterial({ color: 0xff66aa, emissive: 0xff44aa }));
+                heart.position.set((Math.random() - 0.5) * 10, Math.random() * 6 + 2, (Math.random() - 0.5) * 8 - 4);
+                scene.add(heart);
+                setTimeout(() => scene.remove(heart), 3000);
+            }
+        }
+
+        function releaseLantern(lantern) {
+            if (lantern.released) return;
+            if (poemShown) {
+                showMessage("💗 Todos los farolillos ya volaron, mi amor. Sus mensajes quedan en tu corazón. Reinicia para revivir la magia. 💗");
+                return;
+            }
+            
+            lantern.released = true;
+            releasedCount++;
+            
+            // Show the message
+            showMessage(`🏮✨ ${lantern.message} ✨🏮`);
+            
+            // Animate: make it fly up and fade
+            const startY = lantern.group.position.y;
+            const startTime = time;
+            const duration = 2;
+            
+            flyingLanterns.push({
+                lantern: lantern,
+                startY: startY,
+                startTime: time,
+                duration: duration,
+                active: true
+            });
+            
+            updateCounterUI();
+            
+            if (releasedCount === 6) {
+                setTimeout(() => showFinalPoem(), 800);
+            }
+        }
+
+        // Raycaster for clicking on lanterns
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        function handleTap(e) {
+            if (poemShown) return;
+            
+            const rect = renderer.domElement.getBoundingClientRect();
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+                e.preventDefault();
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            
+            const clickableObjects = lanterns.map(l => l.group);
+            const intersects = raycaster.intersectObjects(clickableObjects);
+            
+            if (intersects.length > 0) {
+                const hit = intersects[0].object;
+                const lantern = lanterns.find(l => l.group === hit);
+                if (lantern && !lantern.released) {
+                    releaseLantern(lantern);
+                } else if (lantern && lantern.released) {
+                    showMessage("🏮 Este farolillo ya voló al cielo, igual que mi corazón cuando pienso en ti. 💗");
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            time += 0.016;
+            requestAnimationFrame(animate);
+            
+            // Update flying lanterns
+            for (let i = flyingLanterns.length - 1; i >= 0; i--) {
+                const fly = flyingLanterns[i];
+                const elapsed = time - fly.startTime;
+                const progress = Math.min(elapsed / fly.duration, 1);
+                
+                if (progress >= 1) {
+                    // Lantern reached the sky, remove it
+                    scene.remove(fly.lantern.group);
+                    fly.lantern.group.children.forEach(child => {
+                        if (child.isCSS2DObject) scene.remove(child);
+                    });
+                    flyingLanterns.splice(i, 1);
+                } else {
+                    const ease = Math.sin(progress * Math.PI / 2);
+                    const newY = fly.startY + (6 * ease);
+                    fly.lantern.group.position.y = newY;
+                    // Add slight rotation
+                    fly.lantern.group.rotation.y = progress * Math.PI * 2;
+                    fly.lantern.group.rotation.x = Math.sin(progress * Math.PI) * 0.5;
+                    // Scale down slightly
+                    const scale = 1 - (ease * 0.3);
+                    fly.lantern.group.scale.set(scale, scale, scale);
+                }
+            }
+            
+            // Animate remaining lanterns (floating gently)
+            lanterns.forEach((lantern, idx) => {
+                if (!lantern.released) {
+                    const floatY = Math.sin(time * 1.5 + idx) * 0.08;
+                    lantern.group.position.y = 0.2 + floatY;
+                    lantern.group.rotation.y = Math.sin(time * 0.8 + idx) * 0.2;
+                }
+            });
+            
+            // Rotate stars slowly
+            stars.rotation.y += 0.0005;
+            stars.rotation.x += 0.0002;
+            
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
+        }
+        
+        animate();
+
+        // Event listeners
+        window.addEventListener('click', handleTap);
+        window.addEventListener('touchstart', handleTap);
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            // Reload the page to reset everything
+            window.location.reload();
+        });
+        
+        // Add floating particles (fireflies)
+        const fireflyCount = 200;
+        const fireflyGeo = new THREE.BufferGeometry();
+        const fireflyPos = [];
+        for (let i = 0; i < fireflyCount; i++) {
+            fireflyPos.push((Math.random() - 0.5) * 12);
+            fireflyPos.push(Math.random() * 5);
+            fireflyPos.push((Math.random() - 0.5) * 10 - 2);
+        }
+        fireflyGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(fireflyPos), 3));
+        const fireflies = new THREE.Points(fireflyGeo, new THREE.PointsMaterial({ color: 0xffaa66, size: 0.05, transparent: true }));
+        scene.add(fireflies);
+        
+        function animateFireflies() {
+            requestAnimationFrame(animateFireflies);
+            fireflies.rotation.y += 0.002;
+            fireflies.rotation.x = Math.sin(time * 0.3) * 0.1;
+        }
+        animateFireflies();
+        
+        updateCounterUI();
+    </script>
+</body>
+</html>
