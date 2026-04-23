@@ -528,11 +528,14 @@ y te juro cuidarte toda la vida.
             raycaster.setFromCamera(mouse, camera);
             
             const clickableObjects = lanterns.map(l => l.group);
-            const intersects = raycaster.intersectObjects(clickableObjects);
+           const intersects = raycaster.intersectObjects(clickableObjects, true);
             
             if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                const lantern = lanterns.find(l => l.group === hit);
+               let obj = intersects[0].object;
+while (obj.parent && !lanterns.find(l => l.group === obj)) {
+    obj = obj.parent;
+}
+const lantern = lanterns.find(l => l.group === obj);
                 if (lantern && !lantern.released) {
                     releaseLantern(lantern);
                 } else if (lantern && lantern.released) {
