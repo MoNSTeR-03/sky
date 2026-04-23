@@ -362,31 +362,13 @@ y te juro cuidarte toda la vida.
             photoDiv.style.display = 'none'; // HIDDEN INITIALLY!
             photoDiv.style.position = 'relative';
             
-           // SYMBOL FIRST (hidden image behind)
-const symbolDiv = document.createElement('div');
-symbolDiv.textContent = '❓💜';
-symbolDiv.style.fontSize = '2.5rem';
-symbolDiv.style.display = 'flex';
-symbolDiv.style.alignItems = 'center';
-symbolDiv.style.justifyContent = 'center';
-symbolDiv.style.width = '100%';
-symbolDiv.style.height = '100%';
-symbolDiv.style.position = 'absolute';
-symbolDiv.style.zIndex = '2';
-
-const img = document.createElement('img');
-img.src = data.imageUrl;
-img.style.width = '100%';
-img.style.height = '100%';
-img.style.objectFit = 'cover';
-img.style.borderRadius = '18px';
-img.style.opacity = '0'; // hidden at start
-img.style.transition = 'opacity 0.8s ease';
-
-img.alt = `Foto de Ryoko ${index + 1}`;
-
-photoDiv.appendChild(img);
-photoDiv.appendChild(symbolDiv);
+            const img = document.createElement('img');
+            img.src = data.imageUrl;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '18px';
+            img.alt = `Foto de Ryoko ${index + 1}`;
             
             img.onerror = () => {
                 img.style.display = 'none';
@@ -400,7 +382,7 @@ photoDiv.appendChild(symbolDiv);
                 fallback.style.height = '100%';
                 photoDiv.appendChild(fallback);
             };
-            
+            photoDiv.appendChild(img);
             
             const photoLabel = new CSS2DObject(photoDiv);
             photoLabel.position.set(0, 0.75, 0);
