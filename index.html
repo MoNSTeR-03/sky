@@ -348,27 +348,44 @@ y te juro cuidarte toda la vida.
             group.add(bottomCap);
             
             // Hidden photo container - NOT VISIBLE until clicked!
-            const photoDiv = document.createElement('div');
-            photoDiv.style.width = '130px';
-            photoDiv.style.height = '130px';
-            photoDiv.style.borderRadius = '20px';
-            photoDiv.style.overflow = 'hidden';
-            photoDiv.style.border = `3px solid ${new THREE.Color(data.color).getStyle()}`;
-            photoDiv.style.boxShadow = `0 0 25px ${new THREE.Color(data.color).getStyle()}`;
-            photoDiv.style.background = '#1a1a2a';
-            photoDiv.style.display = 'flex';
-            photoDiv.style.alignItems = 'center';
-            photoDiv.style.justifyContent = 'center';
-            photoDiv.style.display = 'none'; // HIDDEN INITIALLY!
-            photoDiv.style.position = 'relative';
-            
-            const img = document.createElement('img');
-            img.src = data.imageUrl;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.style.borderRadius = '18px';
-            img.alt = `Foto de Ryoko ${index + 1}`;
+            // Hidden photo container
+const photoDiv = document.createElement('div');
+photoDiv.style.width = '130px';
+photoDiv.style.height = '130px';
+photoDiv.style.borderRadius = '20px';
+photoDiv.style.overflow = 'hidden';
+photoDiv.style.border = `3px solid ${new THREE.Color(data.color).getStyle()}`;
+photoDiv.style.boxShadow = `0 0 25px ${new THREE.Color(data.color).getStyle()}`;
+photoDiv.style.background = '#1a1a2a';
+photoDiv.style.display = 'none'; // hidden initially
+photoDiv.style.position = 'relative';
+
+// IMAGE (hidden first)
+const img = document.createElement('img');
+img.src = data.imageUrl;
+img.style.width = '100%';
+img.style.height = '100%';
+img.style.objectFit = 'cover';
+img.style.borderRadius = '18px';
+img.style.opacity = '0';
+img.style.transition = 'opacity 0.8s ease';
+
+// SYMBOL (shown first)
+const symbolDiv = document.createElement('div');
+symbolDiv.className = 'symbol';
+symbolDiv.textContent = '❓💜';
+symbolDiv.style.fontSize = '2.5rem';
+symbolDiv.style.display = 'flex';
+symbolDiv.style.alignItems = 'center';
+symbolDiv.style.justifyContent = 'center';
+symbolDiv.style.width = '100%';
+symbolDiv.style.height = '100%';
+symbolDiv.style.position = 'absolute';
+symbolDiv.style.zIndex = '2';
+symbolDiv.style.transition = 'opacity 0.5s ease';
+
+photoDiv.appendChild(img);
+photoDiv.appendChild(symbolDiv);
             
             img.onerror = () => {
                 img.style.display = 'none';
@@ -382,7 +399,7 @@ y te juro cuidarte toda la vida.
                 fallback.style.height = '100%';
                 photoDiv.appendChild(fallback);
             };
-            photoDiv.appendChild(img);
+            
             
             const photoLabel = new CSS2DObject(photoDiv);
             photoLabel.position.set(0, 0.75, 0);
@@ -467,44 +484,61 @@ y te juro cuidarte toda la vida.
             }
         }
 
-        function releaseLantern(lantern) {
-            if (lantern.released) return;
-            if (poemShown) {
-                showMessage("💗 Todos los farolillos ya volaron, mi amor. Sus mensajes y tus fotos quedan en tu corazón. Reinicia para revivir la magia. 💗");
-                return;
-            }
-            
-            lantern.released = true;
-            releasedCount++;
-            
-            // SHOW THE HIDDEN PHOTO and MESSAGE together!
-            lantern.photoDiv.style.display = 'flex';
-            showMessage(`🏮✨ ¡FAROLILLO ${releasedCount} LIBERADO! ✨🏮\n\n📸 ¡MIRA! UNA FOTO TUYA HA APARECIDO:\n\n${lantern.message}\n\n💗 Este recuerdo vuela alto hacia el cielo... 💗`);
-            
-            // Add a glow ring around the lantern
-            const ringGeo = new THREE.TorusGeometry(0.58, 0.06, 32, 100);
-            const ringMat = new THREE.MeshStandardMaterial({ color: lantern.group.userData.color, emissive: lantern.group.userData.color });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            lantern.group.add(ring);
-            
-            const startY = lantern.group.position.y;
-            const startTime = time;
-            const duration = 2.2;
-            
-            flyingLanterns.push({
-                lantern: lantern,
-                startY: startY,
-                startTime: time,
-                duration: duration,
-                active: true
-            });
-            
-            updateCounterUI();
-            
-            if (releasedCount === 6) {
-                setTimeout(() => showFinalPoem(), 1000);
-            }
-        }
+       function releaseLantern(lantern) {
+    if (lantern.released) return;
+    if (poemShown) {
+        showMessage("💗 Todos los farolillos ya volaron, mi amor. Sus mensajes y tus fotos quedan en tu corazón. Reinicia para revivir la magia. 💗");
+        return;
+    }
+
+    lantern.released = true;
+    releasedCount++;
+
+    // SHOW container
+    lantern.photoDiv.style.display = 'flex';
+
+    // GET elements
+    const img = lantern.photoDiv.querySelector('img');
+    const symbol = lantern.photoDiv.querySelector('.symbol');
+
+    // FIRST: show message + image reveal
+    showMessage(`🏮✨ ¡FAROLILLO ${releasedCount} LIBERADO! ✨🏮\n\n📸 ¡MIRA! UNA FOTO TUYA HA APARECIDO:\n\n${lantern.message}\n\n💗 Este recuerdo vuela alto hacia el cielo... 💗`);
+
+    // Fade animation
+    setTimeout(() => {
+        img.style.opacity = '1';
+        symbol.style.opacity = '0';
+    }, 200);
+
+    // WAIT before flying (so she sees it)
+    setTimeout(() => {
+
+        const ringGeo = new THREE.TorusGeometry(0.58, 0.06, 32, 100);
+        const ringMat = new THREE.MeshStandardMaterial({
+            color: lantern.group.userData.color,
+            emissive: lantern.group.userData.color
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        lantern.group.add(ring);
+
+        const startY = lantern.group.position.y;
+
+        flyingLanterns.push({
+            lantern: lantern,
+            startY: startY,
+            startTime: time,
+            duration: 2.2,
+            active: true
+        });
+
+    }, 1200); // delay before flying
+
+    updateCounterUI();
+
+    if (releasedCount === 6) {
+        setTimeout(() => showFinalPoem(), 1500);
+    }
+}
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
