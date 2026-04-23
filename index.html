@@ -137,7 +137,7 @@
         scene.fog = new THREE.FogExp2(0x0a0a2a, 0.006);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 2.2, 8.5);
+        camera.position.set(0, 2.5, 9);
         camera.lookAt(0, 1.5, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -172,17 +172,17 @@
         const starGeo = new THREE.BufferGeometry();
         const starPos = [];
         for (let i = 0; i < 2000; i++) {
-            starPos.push((Math.random() - 0.5) * 350);
-            starPos.push((Math.random() - 0.5) * 180);
-            starPos.push((Math.random() - 0.5) * 120 - 50);
+            starPos.push((Math.random() - 0.5) * 400);
+            starPos.push((Math.random() - 0.5) * 200);
+            starPos.push((Math.random() - 0.5) * 150 - 50);
         }
         starGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(starPos), 3));
         const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffddcc, size: 0.08, transparent: true, opacity: 0.6 }));
         scene.add(stars);
 
         // Moon
-        const moon = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), new THREE.MeshStandardMaterial({ color: 0xffeedd, emissive: 0xffcc88, emissiveIntensity: 0.3 }));
-        moon.position.set(4, 3.5, -6);
+        const moon = new THREE.Mesh(new THREE.SphereGeometry(0.9, 64, 64), new THREE.MeshStandardMaterial({ color: 0xffeedd, emissive: 0xffcc88, emissiveIntensity: 0.3 }));
+        moon.position.set(4.5, 3.8, -7);
         scene.add(moon);
 
         // Ground
@@ -192,130 +192,93 @@
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // ========= AHMAD AND RYOKO IN THE CENTER =========
-        function createCoupleCharacter(bodyColor, posX, hairColor, isLeft) {
-            const group = new THREE.Group();
-            
-            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.35, 1.0, 16), new THREE.MeshStandardMaterial({ color: bodyColor, roughness: 0.3 }));
-            body.position.y = 0.5;
-            body.castShadow = true;
-            group.add(body);
-            
-            const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 32, 32), new THREE.MeshStandardMaterial({ color: 0xffccaa, roughness: 0.2 }));
-            head.position.y = 1.08;
-            head.castShadow = true;
-            group.add(head);
-            
-            const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 24), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-            eyeL.position.set(-0.14, 1.16, 0.4);
-            group.add(eyeL);
-            const eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 24), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-            eyeR.position.set(0.14, 1.16, 0.4);
-            group.add(eyeR);
-            const pupilL = new THREE.Mesh(new THREE.SphereGeometry(0.055, 24, 24), new THREE.MeshStandardMaterial({ color: 0x000000 }));
-            pupilL.position.set(-0.14, 1.15, 0.47);
-            group.add(pupilL);
-            const pupilR = new THREE.Mesh(new THREE.SphereGeometry(0.055, 24, 24), new THREE.MeshStandardMaterial({ color: 0x000000 }));
-            pupilR.position.set(0.14, 1.15, 0.47);
-            group.add(pupilR);
-            
-            const hair = new THREE.Mesh(new THREE.SphereGeometry(0.48, 24, 24), new THREE.MeshStandardMaterial({ color: hairColor }));
-            hair.position.y = 1.24;
-            hair.scale.set(1, 0.4, 1.1);
-            group.add(hair);
-            
-            group.position.set(posX, 0.28, 0);
-            return group;
-        }
-
-        const ahmad = createCoupleCharacter(0x3366aa, -1.2, 0x442200, true);
-        const ryoko = createCoupleCharacter(0xaa44aa, 1.2, 0x661166, false);
-        scene.add(ahmad);
-        scene.add(ryoko);
-
-        // Floating heart particles between them
-        const heartParticles = [];
-        for (let i = 0; i < 30; i++) {
-            const heart = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff3366, emissiveIntensity: 0.5 }));
-            heart.userData = { angle: Math.random() * Math.PI * 2, radius: 0.5 + Math.random() * 0.8, speed: 0.01 + Math.random() * 0.02, yOff: Math.random() * 1.5 - 0.5 };
-            scene.add(heart);
-            heartParticles.push(heart);
-        }
-
-        // Name labels above them
+        // ========= AHMAD AND RYOKO NAMES FLOATING NEAR MOON =========
         const ahmadNameDiv = document.createElement('div');
         ahmadNameDiv.textContent = '🔥 AHMAD 🔥';
         ahmadNameDiv.style.color = '#ff6688';
-        ahmadNameDiv.style.fontSize = '1.2rem';
+        ahmadNameDiv.style.fontSize = '1.5rem';
         ahmadNameDiv.style.fontWeight = 'bold';
         ahmadNameDiv.style.fontFamily = 'monospace';
-        ahmadNameDiv.style.textShadow = '0 0 15px #ff6688';
+        ahmadNameDiv.style.textShadow = '0 0 20px #ff6688';
         ahmadNameDiv.style.background = 'rgba(0,0,0,0.5)';
-        ahmadNameDiv.style.padding = '4px 12px';
-        ahmadNameDiv.style.borderRadius = '40px';
+        ahmadNameDiv.style.padding = '6px 16px';
+        ahmadNameDiv.style.borderRadius = '50px';
         ahmadNameDiv.style.border = '2px solid #ff6688';
+        ahmadNameDiv.style.backdropFilter = 'blur(8px)';
+        ahmadNameDiv.style.whiteSpace = 'nowrap';
         const ahmadLabel = new CSS2DObject(ahmadNameDiv);
-        ahmadLabel.position.set(-1.2, 1.65, 0);
+        ahmadLabel.position.set(-2.5, 3.2, -3);
         scene.add(ahmadLabel);
 
         const ryokoNameDiv = document.createElement('div');
         ryokoNameDiv.textContent = '💜 RYOKO 💜';
         ryokoNameDiv.style.color = '#ff88cc';
-        ryokoNameDiv.style.fontSize = '1.2rem';
+        ryokoNameDiv.style.fontSize = '1.5rem';
         ryokoNameDiv.style.fontWeight = 'bold';
         ryokoNameDiv.style.fontFamily = 'monospace';
-        ryokoNameDiv.style.textShadow = '0 0 15px #ff88cc';
+        ryokoNameDiv.style.textShadow = '0 0 20px #ff88cc';
         ryokoNameDiv.style.background = 'rgba(0,0,0,0.5)';
-        ryokoNameDiv.style.padding = '4px 12px';
-        ryokoNameDiv.style.borderRadius = '40px';
+        ryokoNameDiv.style.padding = '6px 16px';
+        ryokoNameDiv.style.borderRadius = '50px';
         ryokoNameDiv.style.border = '2px solid #ff88cc';
+        ryokoNameDiv.style.backdropFilter = 'blur(8px)';
+        ryokoNameDiv.style.whiteSpace = 'nowrap';
         const ryokoLabel = new CSS2DObject(ryokoNameDiv);
-        ryokoLabel.position.set(1.2, 1.65, 0);
+        ryokoLabel.position.set(2.5, 3.2, -3);
         scene.add(ryokoLabel);
+
+        // Floating hearts between the names
+        const floatingHearts = [];
+        for (let i = 0; i < 25; i++) {
+            const heart = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), new THREE.MeshStandardMaterial({ color: 0xff4488, emissive: 0xff3366, emissiveIntensity: 0.5 }));
+            heart.userData = {
+                angle: Math.random() * Math.PI * 2,
+                radius: 1.5 + Math.random() * 1.5,
+                speed: 0.01 + Math.random() * 0.02,
+                yOffset: Math.random() * 2 - 1,
+                xOffset: (Math.random() - 0.5) * 3
+            };
+            scene.add(heart);
+            floatingHearts.push(heart);
+        }
 
         // ========= LANTERNS WITH HIDDEN PHOTOS =========
         const lanternsData = [
             { 
                 name: "🏮 FAROLILLO 1", 
                 color: 0xff6688,
-                message: "🌸 AHMAD → RYOKO 🌸\n\nMi guerrera hermosa, tu sonrisa ilumina mi mundo más que mil estrellas juntas. Eres la razón por la que sonrío cada mañana al despertar, la razón por la que quiero ser la mejor versión de mí mismo. Cada vez que te veo, mi corazón late más fuerte y recuerdo lo afortunado que soy. Gracias por existir en mi vida, gracias por permitirme amarte. Eres mi sol, mi luna, mi universo entero. Te quiero con todo mi ser, hoy y siempre. 💗",
-                imageUrl: "Ryoko 1.jpeg",
-                surprise: "✨ ¡MIRALA! Ella ilumina el mundo ✨"
+                message: "🌸 AHMAD → RYOKO 🌸\n\nMi guerrera hermosa, tu sonrisa ilumina mi mundo más que mil estrellas juntas. Eres la razón por la que sonrío cada mañana al despertar. Cada vez que te veo, mi corazón late más fuerte y recuerdo lo afortunado que soy de tenerte. Gracias por existir en mi vida, gracias por permitirme amarte. Eres mi sol, mi luna, mi universo entero. Te quiero con todo mi ser, hoy y siempre. 💗",
+                imageUrl: "Ryoko 1.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 2", 
                 color: 0xffaa66,
-                message: "🌙 AHMAD → RYOKO 🌙\n\nRyoko, cada vez que veo tu rostro, imagino todas las aventuras maravillosas que quiero vivir a tu lado. Volar entre estrellas, caminar por playas infinitas bajo la luna, perderme en tus ojos y no querer encontrar la salida. Eres mi compañera de viaje favorita, mi confidente, mi amor eterno. No hay nadie como tú en todo el universo. Contigo, cada día es una nueva y hermosa aventura, y quiero vivirlas todas a tu lado, hasta el final del tiempo. 💕",
-                imageUrl: "Ryoko 2.jpeg",
-                surprise: "✨ ¡MIRALA! Su luz es única ✨"
+                message: "🌙 AHMAD → RYOKO 🌙\n\nRyoko, cada vez que veo tu rostro, imagino todas las aventuras maravillosas que quiero vivir a tu lado. Volar entre estrellas, caminar por playas infinitas bajo la luna, perderme en tus ojos y no querer encontrar la salida. Eres mi compañera de viaje favorita, mi confidente, mi amor eterno. No hay nadie como tú en todo el universo. Contigo, cada día es una nueva y hermosa aventura. 💕",
+                imageUrl: "Ryoko 2.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 3", 
                 color: 0x66ccff,
-                message: "💋 AHMAD → RYOKO 💋\n\nRyoko, esa mirada tuya me derrite por completo cada vez que la veo. Cuando me miras así, siento que el universo entero se detiene en silencio para admirarte. Tu sonrisa es mi debilidad más hermosa, tu risa es la melodía que quiero escuchar todos los días. Eres peligrosamente hermosa, eres todo lo que siempre soñé y mucho más. Y lo mejor de todo es que eres mía, y yo soy completamente tuyo, en esta vida y en todas las que vengan. 😈💜",
-                imageUrl: "Ryoko 3.jpeg",
-                surprise: "✨ ¡MIRALA! Su mirada es fuego ✨"
+                message: "💋 AHMAD → RYOKO 💋\n\nRyoko, esa mirada tuya me derrite por completo cada vez que la veo. Cuando me miras así, siento que el universo entero se detiene en silencio para admirarte. Tu sonrisa es mi debilidad más hermosa, tu risa es la melodía que quiero escuchar todos los días. Eres peligrosamente hermosa, eres todo lo que siempre soñé y mucho más. Y lo mejor de todo es que eres mía, y yo soy completamente tuyo. 😈💜",
+                imageUrl: "Ryoko 3.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 4", 
                 color: 0x88ffaa,
-                message: "💎 AHMAD → RYOKO 💎\n\nRyoko, te prometo que mientras exista este universo, yo estaré a tu lado. En los días de sol radiante y en los de tormenta, en los momentos de caos y en los de calma absoluta. Tú eres mi hogar, mi refugio seguro, mi razón para ser mejor cada día. No importa lo que pase, no importa qué tormentas vengan, yo voy a sostener tu mano fuerte y no la voy a soltar nunca, jamás. Te quiero con locura, con ternura, con todo lo que soy y todo lo que sueño ser. 🔥💗",
-                imageUrl: "Ryoko 4.jpeg",
-                surprise: "✨ ¡MIRALA! Es mi hogar ✨"
+                message: "💎 AHMAD → RYOKO 💎\n\nRyoko, te prometo que mientras exista este universo, yo estaré a tu lado. En los días de sol radiante y en los de tormenta, en los momentos de caos y en los de calma absoluta. Tú eres mi hogar, mi refugio seguro, mi razón para ser mejor cada día. No importa lo que pase, yo voy a sostener tu mano fuerte y no la voy a soltar nunca, jamás. Te quiero con locura, con ternura, con todo lo que soy. 🔥💗",
+                imageUrl: "Ryoko 4.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 5", 
                 color: 0xff99ff,
-                message: "🌹 AHMAD → RYOKO 🌹\n\nRyoko, cuando veo tu cara, no puedo evitar sonreír como un tonto completamente enamorado. Tus ojos tienen el poder de alegrar mi día más oscuro, de convertir una noche fría en una tarde cálida y llena de luz. Tu risa es mi canción favorita, la que quiero escuchar todos los días de mi vida hasta el último de mis días. Eres mi sol, mi luna, todas mis estrellas juntas en una sola persona. Gracias por ser TÚ, tan increíble, tan única, tan perfectamente maravillosa. 💗✨",
-                imageUrl: "Ryoko 5.jpeg",
-                surprise: "✨ ¡MIRALA! Es mi sol ✨"
+                message: "🌹 AHMAD → RYOKO 🌹\n\nRyoko, cuando veo tu cara, no puedo evitar sonreír como un tonto completamente enamorado. Tus ojos tienen el poder de alegrar mi día más oscuro, de convertir una noche fría en una tarde cálida y llena de luz. Tu risa es mi canción favorita, la que quiero escuchar todos los días de mi vida. Eres mi sol, mi luna, todas mis estrellas juntas en una sola persona. Gracias por ser TÚ, tan increíble, tan única. 💗✨",
+                imageUrl: "Ryoko 5.jpeg"
             },
             { 
                 name: "🏮 FAROLILLO 6", 
                 color: 0xff8866,
-                message: "💕 AHMAD → RYOKO 💕\n\nRyoko, dueña absoluta de mi alma y de mis sueños más profundos. Cada recuerdo tuyo es un tesoro que guardo con el mayor cuidado. Eres mi guerrera, mi amante, mi mejor amiga, mi confidente, mi todo. No hay galaxia, no hay planeta, no hay rincón del universo que prefiera sobre estar a tu lado, sintiendo tu calor, escuchando tu voz. Eres mi todo, mi principio y mi fin, mi razón para existir. Te amo con todo mi ser. Por siempre y para siempre, más allá del infinito. 💗🔥",
-                imageUrl: "Ryoko 6.jpeg",
-                surprise: "✨ ¡MIRALA! Es mi todo ✨"
+                message: "💕 AHMAD → RYOKO 💕\n\nRyoko, dueña absoluta de mi alma y de mis sueños más profundos. Cada recuerdo tuyo es un tesoro que guardo con el mayor cuidado. Eres mi guerrera, mi amante, mi mejor amiga, mi confidente, mi todo. No hay galaxia, no hay planeta, no hay rincón del universo que prefiera sobre estar a tu lado. Eres mi todo, mi principio y mi fin, mi razón para existir. Te amo con todo mi ser. Por siempre y para siempre. 💗🔥",
+                imageUrl: "Ryoko 6.jpeg"
             }
         ];
 
@@ -333,7 +296,7 @@ recuerdos que por siempre quiero guardar.
 Cada imagen de tu hermosa sonrisa
 enciende mi corazón sin pausa ni fin.
 Eres fuego que calienta mi alma,
-eres la brisa que me hace sentir.
+eres la brisa que me hace sentir vivo.
 
 Cuando tus farolillos vuelen alto,
 mis palabras volarán junto a ti.
@@ -356,33 +319,35 @@ y te juro cuidarte toda la vida.
         function createLantern(data, index, xPos, zPos) {
             const group = new THREE.Group();
             
-            // Lantern body with mystery glow (no image visible yet)
-            const bodyMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.5, transparent: true, opacity: 0.9 });
-            const body = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), bodyMat);
+            // Lantern body with mystery glow (image is hidden inside)
+            const bodyMat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.5, transparent: true, opacity: 0.85 });
+            const body = new THREE.Mesh(new THREE.SphereGeometry(0.52, 32, 32), bodyMat);
             body.castShadow = true;
             group.add(body);
             
-            // Mystery glow (image is hidden inside, not visible until click)
-            const mysteryGlow = new THREE.Mesh(new THREE.SphereGeometry(0.45, 24, 24), new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: 0.7, transparent: true, opacity: 0.6 }));
-            group.add(mysteryGlow);
-            
-            // Question mark or heart symbol on the lantern (mystery)
-            const symbolMat = new THREE.MeshStandardMaterial({ color: 0xffdd99, emissive: 0xffaa66 });
-            const symbol = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), symbolMat);
-            symbol.position.set(0, 0.1, 0.52);
-            group.add(symbol);
+            // Mystery question mark (shows that something is hidden)
+            const mysteryMat = new THREE.MeshStandardMaterial({ color: 0xffdd99, emissive: 0xffaa66 });
+            const mysteryMark = new THREE.Mesh(new THREE.TextGeometry('?', {
+                font: null,
+                size: 0.35,
+                height: 0.08
+            }), mysteryMat);
+            // Fallback if TextGeometry fails - use sphere with question mark texture
+            const fallbackMark = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 16), mysteryMat);
+            fallbackMark.position.set(0, 0.05, 0.55);
+            group.add(fallbackMark);
             
             const capMat = new THREE.MeshStandardMaterial({ color: 0xcc8844 });
             const topCap = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.18, 8), capMat);
-            topCap.position.y = 0.58;
+            topCap.position.y = 0.6;
             group.add(topCap);
             
             const bottomCap = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.18, 8), capMat);
-            bottomCap.position.y = -0.58;
+            bottomCap.position.y = -0.6;
             bottomCap.rotation.x = Math.PI;
             group.add(bottomCap);
             
-            // Hidden photo container (will only show when clicked)
+            // Hidden photo container - NOT VISIBLE until clicked!
             const photoDiv = document.createElement('div');
             photoDiv.style.width = '130px';
             photoDiv.style.height = '130px';
@@ -394,9 +359,8 @@ y te juro cuidarte toda la vida.
             photoDiv.style.display = 'flex';
             photoDiv.style.alignItems = 'center';
             photoDiv.style.justifyContent = 'center';
-            photoDiv.style.cursor = 'pointer';
-            photoDiv.style.touchAction = 'manipulation';
-            photoDiv.style.display = 'none'; // Hidden initially!
+            photoDiv.style.display = 'none'; // HIDDEN INITIALLY!
+            photoDiv.style.position = 'relative';
             
             const img = document.createElement('img');
             img.src = data.imageUrl;
@@ -420,16 +384,8 @@ y te juro cuidarte toda la vida.
             };
             photoDiv.appendChild(img);
             
-            const nameSpan = document.createElement('div');
-            nameSpan.textContent = data.name;
-            nameSpan.style.fontSize = '0.7rem';
-            nameSpan.style.marginTop = '8px';
-            nameSpan.style.color = '#ffccaa';
-            nameSpan.style.fontWeight = 'bold';
-            photoDiv.appendChild(nameSpan);
-            
             const photoLabel = new CSS2DObject(photoDiv);
-            photoLabel.position.set(0, 0.7, 0);
+            photoLabel.position.set(0, 0.75, 0);
             group.add(photoLabel);
             
             group.position.set(xPos, 0.2, zPos);
@@ -439,7 +395,6 @@ y te juro cuidarte toda la vida.
                 name: data.name,
                 released: false,
                 color: data.color,
-                surprise: data.surprise,
                 photoLabel: photoLabel,
                 photoDiv: photoDiv
             };
@@ -452,7 +407,6 @@ y te juro cuidarte toda la vida.
                 released: false,
                 index: index,
                 message: data.message,
-                surprise: data.surprise,
                 startX: xPos,
                 startZ: zPos,
                 floatOffset: Math.random() * Math.PI * 2,
@@ -462,12 +416,12 @@ y te juro cuidarte toda la vida.
         }
 
         const lanternPositions = [
-            { x: -3.2, z: -1.0 },
-            { x: -1.8, z: -1.8 },
-            { x: 0, z: -2.2 },
-            { x: 1.8, z: -1.8 },
-            { x: 3.2, z: -1.0 },
-            { x: 2.5, z: 0.5 }
+            { x: -3.0, z: -1.0 },
+            { x: -1.5, z: -2.0 },
+            { x: 0, z: -2.5 },
+            { x: 1.5, z: -2.0 },
+            { x: 3.0, z: -1.0 },
+            { x: 2.2, z: 0.8 }
         ];
 
         lanternsData.forEach((data, i) => {
@@ -505,9 +459,9 @@ y te juro cuidarte toda la vida.
             showMessage(`💖💖💖 ¡RYOKO, MI AMOR! HAS LIBERADO TODOS LOS FAROLILLOS 💖💖💖\n\n${finalPoem}\n\n🌙✨ Tus recuerdos vuelan alto, como mi amor por ti. ✨🌙`);
             
             // Massive heart explosion
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 250; i++) {
                 const heart = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshStandardMaterial({ color: 0xff66aa, emissive: 0xff44aa }));
-                heart.position.set((Math.random() - 0.5) * 14, Math.random() * 8 + 1, (Math.random() - 0.5) * 12 - 4);
+                heart.position.set((Math.random() - 0.5) * 15, Math.random() * 8 + 1, (Math.random() - 0.5) * 12 - 4);
                 scene.add(heart);
                 setTimeout(() => scene.remove(heart), 3500);
             }
@@ -523,12 +477,12 @@ y te juro cuidarte toda la vida.
             lantern.released = true;
             releasedCount++;
             
-            // Show the hidden photo and message together!
+            // SHOW THE HIDDEN PHOTO and MESSAGE together!
             lantern.photoDiv.style.display = 'flex';
-            showMessage(`🏮✨ ${lantern.surprise}\n\n📸 ¡TU FOTO HA APARECIDO!\n\n${lantern.message} ✨🏮`);
+            showMessage(`🏮✨ ¡FAROLILLO ${releasedCount} LIBERADO! ✨🏮\n\n📸 ¡MIRA! UNA FOTO TUYA HA APARECIDO:\n\n${lantern.message}\n\n💗 Este recuerdo vuela alto hacia el cielo... 💗`);
             
             // Add a glow ring around the lantern
-            const ringGeo = new THREE.TorusGeometry(0.55, 0.05, 32, 100);
+            const ringGeo = new THREE.TorusGeometry(0.58, 0.06, 32, 100);
             const ringMat = new THREE.MeshStandardMaterial({ color: lantern.group.userData.color, emissive: lantern.group.userData.color });
             const ring = new THREE.Mesh(ringGeo, ringMat);
             lantern.group.add(ring);
@@ -591,13 +545,17 @@ y te juro cuidarte toda la vida.
             time += 0.016;
             requestAnimationFrame(animate);
             
-            // Animate floating hearts between Ahmad and Ryoko
-            heartParticles.forEach((heart, idx) => {
+            // Animate floating hearts between Ahmad and Ryoko names
+            floatingHearts.forEach((heart, idx) => {
                 heart.userData.angle += heart.userData.speed;
-                heart.position.x = Math.sin(heart.userData.angle + idx) * heart.userData.radius;
-                heart.position.z = Math.cos(heart.userData.angle + idx) * heart.userData.radius * 0.5;
-                heart.position.y = 1.0 + heart.userData.yOff + Math.sin(time * 2 + idx) * 0.1;
+                heart.position.x = -2.5 + Math.sin(heart.userData.angle + idx) * heart.userData.radius + 2.5;
+                heart.position.z = -3 + Math.cos(heart.userData.angle + idx) * heart.userData.radius * 0.8;
+                heart.position.y = 3.2 + heart.userData.yOffset + Math.sin(time * 2 + idx) * 0.15;
             });
+            
+            // Make names float gently
+            ahmadLabel.position.y = 3.2 + Math.sin(time * 1.2) * 0.08;
+            ryokoLabel.position.y = 3.2 + Math.cos(time * 1.3) * 0.08;
             
             // Animate flying lanterns
             for (let i = flyingLanterns.length - 1; i >= 0; i--) {
@@ -622,7 +580,7 @@ y te juro cuidarte toda la vida.
                 }
             }
             
-            // Animate remaining lanterns
+            // Animate remaining lanterns (floating gently)
             lanterns.forEach((lantern, idx) => {
                 if (!lantern.released) {
                     const floatY = Math.sin(time * 1.5 + idx) * 0.08;
@@ -647,13 +605,13 @@ y te juro cuidarte toda la vida.
         });
         
         // Fireflies
-        const fireflyCount = 300;
+        const fireflyCount = 400;
         const fireflyGeo = new THREE.BufferGeometry();
         const fireflyPos = [];
         for (let i = 0; i < fireflyCount; i++) {
-            fireflyPos.push((Math.random() - 0.5) * 14);
-            fireflyPos.push(Math.random() * 6);
-            fireflyPos.push((Math.random() - 0.5) * 12 - 3);
+            fireflyPos.push((Math.random() - 0.5) * 16);
+            fireflyPos.push(Math.random() * 7);
+            fireflyPos.push((Math.random() - 0.5) * 14 - 4);
         }
         fireflyGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(fireflyPos), 3));
         const fireflies = new THREE.Points(fireflyGeo, new THREE.PointsMaterial({ color: 0xffaa77, size: 0.05, transparent: true }));
@@ -666,6 +624,9 @@ y te juro cuidarte toda la vida.
         animateFireflies();
         
         updateCounterUI();
+        
+        // Fix for TextGeometry - add a simple sphere with glow instead
+        console.log("✨ Farolillos listos - las fotos están escondidas hasta que las toques ✨");
     </script>
 </body>
 </html>
